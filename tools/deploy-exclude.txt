@@ -1,0 +1,45 @@
+# rsync --exclude-from list: files kept in the working tree (as sources, or
+# for a future page revision) but never uploaded to the live site because
+# nothing in index.html/project.css/scripts/*.js currently requests them.
+#
+# Re-check with:
+#   grep -ohE "assets/[A-Za-z0-9_/.-]+" index.html styles/project.css scripts/*.js | sort -u
+# before trusting this list after a markup change -- it was hand-built from
+# that audit, not generated, so it goes stale silently if a reference is added
+# or removed without updating this file too.
+
+# Referenced nowhere in the page. metadata.json also leaks a local filesystem
+# path from wherever the layers were generated -- one more reason to keep it
+# off the public deploy, not just its size.
+assets/videos/RAWpID.mp4
+assets/instantrph/lae/*.png
+assets/instantrph/metadata.json
+
+# Superseded by the .webp of the same name that scripts/method-3d.js actually
+# loads (see TEXTURE_EXT) -- the .png stays as the source asset, downscaling
+# and re-exporting a .webp is tools/convert-textures.py.
+assets/instantrph/layer_*.png
+assets/instantrph/focal_*.png
+
+# Superseded by FigSimExp_web.webp, referenced at index.html's defocus figure.
+assets/defocus/FigSimExp_web.png
+
+# Only reachable from a commented-out block in index.html.
+assets/instantrph/method_sketch.png
+assets/logos/*
+
+# CONFIG.focalCount (scripts/method-3d.js) is 5 and index.html sets no
+# data-focal-count, so only focal_00..04 ever load -- already covered by the
+# focal_*.png line above, listed again for focal_*.webp since the loader only
+# ever requests indices below focalCount.
+assets/instantrph/focal_0[5-9].webp
+assets/instantrph/focal_1*.webp
+assets/instantrph/focal_20.webp
+
+# Only lae_{scale,bias}_repeat00/01_evolution.mp4 appear in the
+# reparameterization gallery markup; repeat02-07 are unused source clips.
+assets/lae_training/lae_scale_repeat0[2-7]_evolution.mp4
+assets/lae_training/lae_bias_repeat0[2-7]_evolution.mp4
+
+# Only reachable from a commented-out block in index.html.
+assets/lae_training/psnr_evolution.mp4

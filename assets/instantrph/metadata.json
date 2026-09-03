@@ -1,0 +1,14 @@
+{
+  "blend_file": "/media/opueyo/DATOS1/HoloValidateDataset/blender_dataset/pawn_shop/scene.blend",
+  "num_layers": 21,
+  "diopter_range": 6.0,
+  "scale": 7.5,
+  "engine": "CYCLES",
+  "samples": 4096,
+  "film_transparent": false,
+  "use_compositing": false,
+  "use_sequencer": false,
+  "resolution_x": 1280,
+  "resolution_y": 800,
+  "pixel_filter_size": 0.009999999776482582
+}

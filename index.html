@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- https://doi.org/10.1145/3592429 -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Instant RPH </title>
+  <link href="./styles/project.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Academicons removed: nothing on the page uses an `ai ai-*` class, so this
+       was a second render-blocking CDN request buying nothing. -->
+</head>
+
+<body>
+  <a id="top"></a>
+
+  <nav class="sticky-nav" id="sticky-nav">
+    <div class="sticky-nav-inner">
+      <a href="#overview" class="sticky-nav-link">Overview</a>
+      <a href="#method" class="sticky-nav-link">InstantRPH</a>
+      <a href="#reparameterization" class="sticky-nav-link">Reparameterization</a>
+      <a href="#focus-cues" class="sticky-nav-link">Focus Cues</a>
+      <a href="#parallax" class="sticky-nav-link">Parallax</a>
+      <a href="#bibtex" class="sticky-nav-link">BibTeX</a>
+    </div>
+  </nav>
+
+  <div id="wrapper">
+    <div id="header">
+      <div id="title">Instant Random Phase Holography with Parallax and Defocus Cues</div>
+
+      <div id="journal">SIGGRAPH Asia 2026</div>
+      
+      <div class="authors">
+        <span class="author-block"><a href="https://opueyociutad.github.io/">Oscar Pueyo-Ciutad</a></span>
+        <span class="author-block"><a href="https://bkv2chu.github.io/">Victor Chu</a></span>
+        <span class="author-block"><a href="https://congliwang.github.io/">Congli Wang</a></span>
+        <span class="author-block"><a href="https://ethan-tseng.github.io/">Ethan Tseng</a></span>
+        <span class="author-block"><a href="https://florianschiffers.com/">Florian Schiffers</a></span>
+        <span class="author-block"><a href="https://redo-sanchez.github.io/">Albert Redo-Sanchez</a></span>
+        <span class="author-block"><a href="http://giga.cps.unizar.es/~diegog/">Diego Gutierrez</a></span>
+        <span class="author-block"><a href="https://www.cs.princeton.edu/~fheide/">Felix Heide</a></span>
+      </div>
+
+
+      <div class="publication-links">
+        <span class="link-block">
+          <a href="https://nas-graphics.unizar.es/s/InstantRPH_main" class="button" target="_blank" rel="noopener">
+            <span class="icon"><i class="fas fa-file-pdf"></i></span>
+            <span>Paper</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="https://nas-graphics.unizar.es/s/InstantRPH_supp" class="button" target="_blank" rel="noopener">
+            <span class="icon"><i class="fas fa-file-lines"></i></span>
+            <span>Supplementary</span>
+          </a>
+        </span>
+        <span class="link-block">
+          <a href="https://github.com/opueyociutad/InstantRPH" class="button" target="_blank" rel="noopener">
+            <span class="icon"><i class="fab fa-github"></i></span>
+            <span>Code</span>
+          </a>
+        </span>
+      </div>
+
+    </div>
+
+    <div id="content">
+
+      <div class="comparison-band" id="overview">
+        <div class="comparison-wrapper">
+          <div class="video-comparison" data-start-position="50" data-sweep-speed="12" data-edge-pause="700">
+            <div class="video-comparison-stage">
+              <video class="video-comparison-video video-comparison-base" src="assets/videos/OURS.mp4"
+                poster="assets/videos/OURS_poster.webp" muted playsinline preload="none"></video>
+              <video class="video-comparison-video video-comparison-overlay" src="assets/videos/ARH.mp4"
+                poster="assets/videos/ARH_poster.webp" muted playsinline preload="none"></video>
+              <div class="video-comparison-divider">
+                <div class="video-comparison-handle"></div>
+              </div>
+              <span class="video-comparison-tag video-comparison-tag-left">ARH (7.6 FPS)</span>
+              <span class="video-comparison-tag video-comparison-tag-right">Ours (54 FPS)</span>
+            </div>
+            <div class="video-comparison-progress">
+              <div class="video-comparison-progress-fill"></div>
+            </div>
+          </div>
+
+          <p class="comparison-subtitle">
+            [Simulation] Hover over the video to pause and compare the results!
+          </p>
+          <div class="comparison-text">
+            <p>
+              Computer-generated holography (CGH) has the potential to become a practical medium for immersive AR/VR,
+              offering true volumetric depth, real-time performance, and robustness to optical deviations.
+              However, existing CGH methods are forced to compromise between performance, volumetric accuracy, and
+              robustness.
+            </p>
+
+            <p>
+              Instant Random Phase Holography (Instant RPH) generates artifact-resilient holograms by construction,
+              naturally encoding accurate occlusion, view-dependent parallax, and optical blur in a single forward pass.
+            </p>
+          </div>
+          
+        </div>
+
+        <!-- <div class="image-container logo-strip">
+  <img src="assets/logos/UZ_logo.png" alt="Overview" class="responsive-image logo-image">
+  <img src="assets/logos/I3A_logo.png" alt="Overview" class="responsive-image logo-image">
+  <img src="assets/logos/University_of_Toronto_Logo.png" alt="Overview" class="responsive-image logo-image">
+  <img src="assets/logos/University-of-Princeton-Logo.png" alt="Overview" class="responsive-image logo-image">
+  <img src="assets/logos/northwestern_university.png" alt="Overview" class="responsive-image logo-image">
+</div> -->
+      </div>
+
+
+      <h2 id="method">Instant Random Phase Holography</h2>
+      <!-- <div class="image-container method-sketch-container">
+      <img src="assets/instantrph/method_sketch.png" alt="Instant RPH method sketch" class="responsive-image method-sketch-image">
+    </div> -->
+      <p>
+        Our framework bridges modern graphics engines and holographic hardware by rendering arbitrary 3D content (i.e., triangle meshes, 3DGS) into a 21-layer Multiplane Image (MPI)
+        constructed in diopter space to match the human eye's depth of field (DoF), decoupling scene complexity from rendering cost.
+        This MPI is then converted into a complex field using a fixed random phase and our Linear Amplitude Encoders (LAE) to suppress speckle noise and improve hologram quality.
+        Rather than relying on computationally expensive FFT-based Angular Spectrum Method (ASM) propagation, we utilize efficient Compact RSD (C-RSD) convolutions for inter-layer complex-field propagation.
+        Finally, we obtain a phase-only hologram by simply discarding the amplitude, enabling real-time streaming of artifact-resilient 3D content with natural defocus and parallax cues.
+      </p>
+
+      <div class="method-3d" data-method-3d>
+        <canvas class="method-3d-canvas"></canvas>
+        <div class="method-3d-hint">Drag to orbit</div>
+      </div>
+      <div class="method-3d-progress" data-method-3d-progress>
+        <div class="method-3d-progress-fill"></div>
+      </div>
+
+      <h2 id="reparameterization">Neural One-Step Phase Retrieval Reparameterization</h2>
+      <div class="reparameterization-layout">
+        <div class="reparameterization-copy">
+          <p>
+            Random phase holograms enable natural defocus, parallax, and artifact resilience.
+            However, current real-time random phase methods suffer from severe contrast loss and heavy speckle noise.
+          </p>
+
+          <p>
+            To achieve high-quality random phase holography, we reparameterize One-Step Phase Retrieval.
+            Since the target plane amplitude and SLM phase are strictly coupled via wave propagation, we can encode target amplitude
+            -which would otherwise be lost- directly into the spatial phase profile.
+          </p>
+          <p>
+            We jointly train time-multiplexed Linear Amplitude Encoders (LAE), a set of scaling and bias textures
+            applied to the target amplitude to actively counteract speckle noise and contrast loss without imposing any
+            iterative overhead.
+          </p>
+        </div>
+
+        <div class="reparameterization-media" data-lae-training-gallery="lae-training" data-frame-rate="6">
+          <div class="lae-training-panel">
+            <div class="lae-training-panel-title">(Showing the first 2 out of 8 scales and biases)</div>
+            <div class="lae-training-grid">
+              <div class="lae-training-tile">
+                <video class="lae-training-video" src="assets/lae_training/lae_scale_repeat00_evolution.mp4" muted loop
+                  playsinline preload="none"></video>
+                <div class="lae-playbar">
+                  <div class="lae-playbar-fill"></div>
+                </div>
+                <span class="lae-training-caption">Scale 1</span>
+              </div>
+              <div class="lae-training-tile">
+                <video class="lae-training-video" src="assets/lae_training/lae_scale_repeat01_evolution.mp4" muted loop
+                  playsinline preload="none"></video>
+                <div class="lae-playbar">
+                  <div class="lae-playbar-fill"></div>
+                </div>
+                <span class="lae-training-caption">Scale 2</span>
+              </div>
+              <div class="lae-training-tile">
+                <video class="lae-training-video" src="assets/lae_training/lae_bias_repeat00_evolution.mp4" muted loop
+                  playsinline preload="none"></video>
+                <div class="lae-playbar">
+                  <div class="lae-playbar-fill"></div>
+                </div>
+                <span class="lae-training-caption">Bias 1</span>
+              </div>
+              <div class="lae-training-tile">
+                <video class="lae-training-video" src="assets/lae_training/lae_bias_repeat01_evolution.mp4" muted loop
+                  playsinline preload="none"></video>
+                <div class="lae-playbar">
+                  <div class="lae-playbar-fill"></div>
+                </div>
+                <span class="lae-training-caption">Bias 2</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+            <p class="comparison-subtitle">
+              [Simulation] Hover over the results to zoom in!
+            </p>
+      <div class="lae-hologram-band" data-lae-training-gallery="lae-training" data-frame-rate="6">
+        <!-- <div class="lae-training-panel-title">Reconstructed Holograms</div> -->
+        <div class="lae-training-row">
+          <div class="lae-training-tile lae-training-tile-wide">
+            <video class="lae-training-video" src="assets/lae_training/hologram_00_evolution.mp4" muted loop playsinline
+              preload="none"></video>
+            <div class="lae-playbar">
+              <div class="lae-playbar-fill"></div>
+            </div>
+          </div>
+          <div class="lae-training-tile lae-training-tile-wide">
+            <video class="lae-training-video" src="assets/lae_training/hologram_01_evolution.mp4" muted loop playsinline
+              preload="none"></video>
+            <div class="lae-playbar">
+              <div class="lae-playbar-fill"></div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="lae-training-tile lae-psnr-overlay">
+          <video class="lae-training-video" src="assets/lae_training/psnr_evolution.mp4" muted loop playsinline
+            preload="auto"></video>
+        </div> -->
+      </div>
+
+
+      <h2 id="focus-cues">Focus Cues</h2>
+      <p>
+        Instant RPH reproduces natural focus cues across triangle meshes and 3DGS scenes, outperforming prior state-of-the-art method in simulation and experimentally.
+        Our LAEs significantly improve color quality and speckle reduction, mostly noticeable in homogeneous areas, such as the Bulldozer's shovel.
+        Furthermore, ARH does not handle occlusion between layers, leading to dark artifacts surrounding different depth layers.
+        Due to our efficient propagation between layers, our Instant RPH shows artifact-free, correct occlusions, while enabling natural, continuous focus cues within the limits of human depth perception.
+      </p>
+      <div class="image-container">
+        <img src="assets/defocus/FigSimExp_web.webp"
+          alt="Simulated and experimental defocus comparison across focal distances"
+          class="responsive-image defocus-fig-image"
+          width="2529" height="1199" loading="lazy" decoding="async">
+      </div>
+
+      <h2 id="parallax">View-Dependent Parallax</h2>
+      <p>
+        Parallax cues in near-eye holographic displays are subtle, but crucial for an accurate immersive experience. 
+        <br/>
+        Instant RPH presents correct parallax cues:
+        [Simulation] As the pupil moves, the vase shifts position and reveals the hidden background.
+      </p>
+      <div class="lae-hologram-band lae-parallax-band" data-lae-training-gallery data-frame-rate="15">
+        <div class="lae-training-row">
+          <div class="lae-training-tile lae-training-tile-wide lae-training-tile-parallax" data-no-zoom>
+            <video class="lae-training-video" src="assets/parallax/frames_loop_arh.mp4" muted loop playsinline
+              preload="none"></video>
+            <span class="video-comparison-tag video-comparison-tag-bottom-left">ARH</span>
+          </div>
+          <div class="lae-training-tile lae-training-tile-wide lae-training-tile-parallax" data-no-zoom>
+            <video class="lae-training-video" src="assets/parallax/frames_loop_checkpoint_model.mp4" muted
+              playsinline preload="none"></video>
+            <span class="video-comparison-tag video-comparison-tag-bottom-left">Ours</span>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="bibtex">BibTeX</h2>
+      <div class="bibtex-container">
+        <pre id="bibtexsec">
+@inproceedings{pueyociutad2026instantrph,
+    title     = {Instant Random Phase Holography with Parallax and Defocus Cues},
+    author    = {Pueyo-Ciutad, Oscar and Chu, Victor and Wang, Congli and Tseng, Ethan and Schiffers, Florian and Redo-Sanchez, Albert and Gutierrez, Diego and Heide, Felix},
+    booktitle = {SIGGRAPH Asia 2026 Conference Papers},
+    month     = {December},
+    year      = {2026}
+}
+        </pre>
+        <button type="button" class="bibtex-copy-btn" id="bibtexCopyBtn" aria-label="Copy BibTeX citation" title="Copy">📋</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="./scripts/video-comparison.js"></script>
+  <script src="./scripts/sticky-nav.js"></script>
+  <script src="./scripts/bibtex-copy.js"></script>
+
+  <!-- Three.js is vendored locally (assets/vendor/) rather than pulled from a CDN,
+     so the page renders with no network dependency. -->
+  <script type="importmap">
+{
+  "imports": {
+    "three": "./assets/vendor/three.module.min.js"
+  }
+}
+</script>
+  <script type="module" src="./scripts/method-3d.js"></script>
+
+</body>
+
+</html>
